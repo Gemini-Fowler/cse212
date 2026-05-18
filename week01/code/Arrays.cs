@@ -37,10 +37,37 @@ public static class Arrays
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
-    {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+{
+    // PLAN / PROCESS:
+    // 1. Understand what "rotate right" means:
+    //      - We take the last 'amount' elements of the list
+    //        and move them to the front of the list.
+    //      - The order of those moved elements stays the same.
+    //
+    // 2. Identify where the "tail" section begins.
+    //      - If the list has n elements, the last 'amount' elements
+    //        start at index (n - amount).
+    //
+    // 3. Extract that tail portion using GetRange(startIndex, count).
+    //
+    // 4. Remove those same elements from the end of the list
+    //    using RemoveRange(startIndex, count).
+    //
+    // 5. Insert the extracted tail elements at the beginning of the list
+    //    using InsertRange(0, tailList).
+    //
+    // 6. Because Lists are dynamic, we modify the existing list
+    //    instead of returning a new one.
+
+    int n = data.Count;
+
+    // Step 3: Get the last 'amount' elements
+    List<int> tail = data.GetRange(n - amount, amount);
+
+    // Step 4: Remove those elements from the original list
+    data.RemoveRange(n - amount, amount);
+
+    // Step 5: Insert the tail at the beginning
+    data.InsertRange(0, tail);
     }
 }
