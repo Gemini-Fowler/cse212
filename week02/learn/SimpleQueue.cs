@@ -11,6 +11,8 @@
         var value = queue.Dequeue();
         Console.WriteLine(value);
         // Defect(s) Found:
+        // 1) Enqueue was inserting at the front instead of the back.
+        // 2) Dequeue was reading/removing from index 1 instead of index 0.
 
         Console.WriteLine("------------");
 
@@ -28,7 +30,8 @@
         Console.WriteLine(value);
         value = queue.Dequeue();
         Console.WriteLine(value);
-        // Defect(s) Found: 
+        // Defect(s) Found:
+        // Same as above: wrong insert position and wrong dequeue index.
 
         Console.WriteLine("------------");
 
@@ -44,7 +47,8 @@
         catch (IndexOutOfRangeException) {
             Console.WriteLine("I got the exception as expected.");
         }
-        // Defect(s) Found: 
+        // Defect(s) Found:
+        // None after fixes: exception is thrown correctly when empty.
     }
 
     private readonly List<int> _queue = new();
@@ -54,7 +58,12 @@
     /// </summary>
     /// <param name="value">Integer value to add to the queue</param>
     private void Enqueue(int value) {
-        _queue.Insert(0, value);
+        // Original defect:
+        // _queue.Insert(0, value);  // This puts the new item at the FRONT.
+        // Requirement: enqueue should put a new item at the BACK of the queue.
+
+        // Fix: add to the end of the list (back of the queue).
+        _queue.Add(value);
     }
 
     /// <summary>
@@ -66,8 +75,14 @@
         if (_queue.Count <= 0)
             throw new IndexOutOfRangeException();
 
-        var value = _queue[1];
-        _queue.RemoveAt(1);
+        // Original defect:
+        // var value = _queue[1];
+        // _queue.RemoveAt(1);
+        // This skips the first element and removes the second.
+
+        // Fix: remove from the FRONT (index 0) to satisfy FIFO.
+        var value = _queue[0];
+        _queue.RemoveAt(0);
         return value;
     }
 }
